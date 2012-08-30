@@ -1,6 +1,6 @@
-require "expo_sync/base"
-require "expo_sync/version"
+require 'expo_sync/base'
+require 'expo_sync/remote'
+require 'expo_sync/railtie' if defined?(Rails)
+require 'expo_sync/version'
 
-module ExpoSync
-
-end
+ExpoSync::Remote::GetContactAccountData.build_models!
