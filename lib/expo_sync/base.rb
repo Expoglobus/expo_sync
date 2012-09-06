@@ -4,7 +4,7 @@ require 'expo_sync/helpers/path_builder'
 require 'expo_sync/helpers/class_builder'
 
 module ExpoSync
-  SERVICE_URL = 'https://:domain/egvs/Forum/ForumService.svc/json/:method/:token/:project/null/:delta'.freeze
+  SERVICE_URL = 'https://:domain/egvs/Forum/ForumService.svc/json/:method/:token/:project/:delta'.freeze
 
   class Base
     include ExpoSync::Helpers::PathBuilder
