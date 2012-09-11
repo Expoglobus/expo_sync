@@ -13,6 +13,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "http://expoglobus.com"
 
   gem.add_dependency('mongoid')
+  gem.add_dependency('faraday')
   gem.add_dependency('activesupport')
 
   gem.files         = `git ls-files`.split($/)

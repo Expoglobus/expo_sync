@@ -1,3 +1,3 @@
 module ExpoSync
-  VERSION = "0.1.3.alpha"
+  VERSION = "0.2.1.alpha"
 end
