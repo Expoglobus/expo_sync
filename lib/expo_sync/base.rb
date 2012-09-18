@@ -16,6 +16,7 @@ module ExpoSync
     # Class var with default value
     cattr_accessor(:service_domain) { 'alpha' }
     cattr_accessor(:security_token) { 'AAII2012Forum' }
+    cattr_accessor(:project_id) { 1 }
 
     attr_reader :method
     attr_reader :response
@@ -27,7 +28,7 @@ module ExpoSync
 
     def fetch
       @response = http.post do |request|
-        request.body = {:securityToken => security_token, :projectID => 1, :sinceDateTime => 1}.to_json
+        request.body = {:securityToken => security_token, :projectID => project_id, :sinceDateTime => 1}.to_json
       end
 
     end
