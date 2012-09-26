@@ -51,7 +51,7 @@ module ExpoSync
       klass.destroy_all # Clear all data
       data[field].each do |object|
         klass.create(object)
-      end
+      end if data[field].kind_of? Array
     end
   end
 end
