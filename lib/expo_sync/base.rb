@@ -6,6 +6,11 @@ require 'expo_sync/helpers/class_builder'
 module ExpoSync
   SERVICE_URL = 'https://:domain/egvs/Forum/ForumService.svc/json/:method'.freeze
 
+  # Class var with default value
+  mattr_accessor(:service_domain)
+  mattr_accessor(:security_token)
+  mattr_accessor(:project_id)
+
   class Base
 
     HEADERS = {'User-Agent' => "Expo Sync", 'Content-Type' => 'application/json'}.freeze
@@ -13,22 +18,21 @@ module ExpoSync
     include ExpoSync::Helpers::PathBuilder
     extend ExpoSync::Helpers::ClassBuilder
 
-    # Class var with default value
-    cattr_accessor(:service_domain) { 'alpha' }
-    cattr_accessor(:security_token) { 'AAII2012Forum' }
-    cattr_accessor(:project_id) { 1 }
-
     attr_reader :method
     attr_reader :response
     attr_reader :data
+    attr_reader :last_update_param
 
-    def initialize(method)
+    def initialize(method, last_update_param = 'sinceDateTime')
       @method = method
+      @last_update_param = last_update_param
     end
 
     def fetch
       @response = http.post do |request|
-        request.body = {:securityToken => security_token, :projectID => project_id, :sinceDateTime => 1}.to_json
+        params = {:securityToken => ExpoSync.security_token, :projectID => ExpoSync.project_id, :"#{last_update_param}" => 1}
+        puts params.inspect
+        request.body = {:securityToken => ExpoSync.security_token, :projectID => ExpoSync.project_id, :"#{last_update_param}" => 1}.to_json
       end
 
     end
@@ -50,7 +54,14 @@ module ExpoSync
 
     # Path to API
     def path
-      path_map(SERVICE_URL, :domain => service_domain, :method => @method)
+      path_map(SERVICE_URL, :domain => ExpoSync.service_domain, :method => @method)
     end
+
+      def self.process!
+        instance = self.new
+        instance.fetch
+        instance.parse
+        instance
+      end
   end
 end
