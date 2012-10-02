@@ -5,3 +5,4 @@ require 'expo_sync/version'
 
 ExpoSync::Remote::GetContactAccountData.build_models!
 ExpoSync::Remote::GetRoomEventData.build_models!
+ExpoSync::Remote::GetProjectData.build_models!

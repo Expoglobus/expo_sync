@@ -3,8 +3,8 @@ module ExpoSync
     field :ExponentName, localize: true
     field :ExponentDescription, localize: true
 
-    def self.store_with_locale(data)
-      destroy_all
+    def self.store_with_locale(data, delta = false)
+      destroy_all if !delta
       grouped_data = data.group_by {|a| a[:AccountID]}
       grouped_data.each do |id, account_locales|
         account = find_or_create_by(:AccountID => id)

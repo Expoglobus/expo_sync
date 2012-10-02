@@ -23,24 +23,33 @@ module ExpoSync
     attr_reader :data
     attr_reader :last_update_param
 
-    def initialize(method, last_update_param = 'sinceDateTime')
+    def initialize(method, options = {})
+      options.symbolize_keys!
+      @delta = options.delete(:delta)
+      @delta = {:key => @delta} if @delta.is_a? String
       @method = method
-      @last_update_param = last_update_param
     end
 
     def fetch
+      body = {}
+      body[:securityToken] = ExpoSync.security_token
+      body[:projectID] = ExpoSync.project_id
+      if @delta
+        body[@delta[:key]] = (@delta[:value] || 1).to_i
+      end
+
       @response = http.post do |request|
-        params = {:securityToken => ExpoSync.security_token, :projectID => ExpoSync.project_id, :"#{last_update_param}" => 1}
-        puts params.inspect
-        request.body = {:securityToken => ExpoSync.security_token, :projectID => ExpoSync.project_id, :"#{last_update_param}" => 1}.to_json
+        puts body.inspect
+        request.body = body.to_json
       end
 
     end
 
     def parse
       # ["AccountList", "CategoryAccountList", "CategoryList", "ContactList", "DeletedAccountIDs", "DeletedCategoryAccountIDs", "DeletedCategoryIDs", "DeletedContactIDs"]
-      @data ||= JSON.parse(@response.body, object_class: RemoteData, symbolize_names: true)[:"#{@method}Result"]
-      @data.normalize!
+      @data = JSON.parse(@response.body, object_class: RemoteData, symbolize_names: true)[:"#{@method}Result"]
+      @data.normalize! if @data
+      true
     end
 
     def http

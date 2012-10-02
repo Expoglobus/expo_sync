@@ -15,20 +15,28 @@ module ExpoSync
       cattr_accessor :deleted_fields
 
 
-      self.data_array_fields  = [:AccessGroupList, :CategoryAccountList, :ParticipationCategoryList, :ParticipiationAccessGroupList, :ProjectCultureList]
+      self.data_array_fields  = [:CategoryAccountList]
       self.deleted_fields     = [:DeletedAccountIDs, :DeletedCategoryAccountIDs, :DeletedCategoryIDs, :DeletedContactIDs]
 
       RemoteData.date_keys = [:UpdatedDateTime, :CreatedDateTime]
 
-      def initialize
-        super('GetContactAccountData')
+      #
+      # ### Get data without delta
+      # GetContactAccountData.new :force => true
+      #
+      def initialize(options = {})
+        @redis_delta_key = "expo_sync:project:#{ExpoSync.project_id}:delta"
+        @delta = $redis.get(@redis_delta_key) if !options[:force]
+        super('GetContactAccountData', :delta => { :key => 'sinceDateTime', :value => @delta })
       end
 
       def store
-        ExpoSync::AccountList.store_with_locale(data[:AccountList])
-        ExpoSync::ContactList.store_with_locale(data[:ContactList])
-        ExpoSync::CategoryList.store_with_locale(data[:CategoryList])
-        ExpoSync::Project.store_with_locale(data[:Project])
+        ExpoSync::AccountList.store_with_locale(data[:AccountList], @delta)
+        ExpoSync::ContactList.store_with_locale(data[:ContactList], @delta)
+        ExpoSync::CategoryList.store_with_locale(data[:CategoryList], @delta)
+
+        $redis.set(@redis_delta_key, data[:DeltaLastDateTime])
+        # ExpoSync::Project.store_with_locale(data[:Project])
         super
         true
       end
@@ -43,9 +51,31 @@ module ExpoSync
       RemoteData.date_keys = [:UpdatedDateTime, :CreatedDateTime, :EventDate, :StartTime, :EndTime]
 
       def initialize
-        super('GetRoomEventData', 'roomEventLastModified')
+        super('GetRoomEventData', :delta => 'roomEventLastModified')
       end
 
+    end
+
+    class GetProjectData < Base
+      include ExpoSync::DataStorage
+      self.data_array_fields = [:AccessGroupList, :ParticipationCategoryList, :ParticipiationAccessGroupList, :ProjectCultureList]
+
+      def initialize
+        super('GetProjectData')
+      end
+
+      def store
+        ExpoSync::Project.store_with_locale(data[:Project])
+        super
+        true
+      end
+    end
+
+    class GetAllProjects < Base
+
+      def initialize
+        super('GetAllProjects')
+      end
     end
   end
 end

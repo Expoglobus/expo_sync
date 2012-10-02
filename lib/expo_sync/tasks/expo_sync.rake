@@ -19,9 +19,12 @@ namespace :expo_sync do
     puts "#### Sync ContactAccountData... "
     ExpoSync::Remote::GetContactAccountData.process!
     puts
+    puts "#### Sync GetProjectData... "
+    ExpoSync::Remote::GetProjectData.process!
     puts
     puts "#### Sync GetRoomEventData... "
     ExpoSync::Remote::GetRoomEventData.process!
+    puts
     puts "Done!\n"
   end
 end
