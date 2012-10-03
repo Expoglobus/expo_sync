@@ -11,5 +11,9 @@ module ExpoSync
     def self.current
       first
     end
+
+    def self.find_by_code(code)
+      unscoped.where(:ProjectCode => code).first
+    end
   end
 end
