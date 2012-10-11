@@ -53,7 +53,7 @@ module ExpoSync
       # ["AccountList", "CategoryAccountList", "CategoryList", "ContactList", "DeletedAccountIDs", "DeletedCategoryAccountIDs", "DeletedCategoryIDs", "DeletedContactIDs"]
       @data = JSON.parse(@response.body, object_class: RemoteData, symbolize_names: true)[:"#{@method}Result"]
       raise "Sync fail. Respose body: nil" unless @data
-      @data.normalize!(date_field)
+      @data.normalize!(date_fields)
       true
     end
 
