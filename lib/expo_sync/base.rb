@@ -6,6 +6,8 @@ require 'expo_sync/helpers/class_builder'
 module ExpoSync
   SERVICE_URL = 'https://:domain/egvs/Forum/ForumService.svc/json/:method'.freeze
 
+  CULTURE_MAP = {1 => :en, 2 => :de, 3 => :ru}.freeze
+
   # Class var with default value
   mattr_accessor(:service_domain)
   mattr_accessor(:security_token)

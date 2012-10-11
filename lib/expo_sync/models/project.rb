@@ -1,11 +1,22 @@
 module ExpoSync
   class Project < DataModel
-    # field :CategoryName, localize: true
-    # field :CategoryDescription, localize: true
+    field :ProjectName, localize: true
+    field :ProjectDescription, localize: true
+    field :PlaceDescription, localize: true
 
     def self.store_with_locale(data)
       project = find_or_create_by(:ProjectID => data[:ProjectID])
       project.update_attributes(data)
+
+      data[:ProjectTranslations].each do |t|
+        I18n.with_locale CULTURE_MAP[t[:CultureID]] do
+          project.update_attributes({
+            :ProjectName => t[:ProjectName],
+            :ProjectDescription => t[:ProjectDescription],
+            :PlaceDescription => t[:PlaceDescription]
+            })
+        end
+      end
     end
 
     def self.current

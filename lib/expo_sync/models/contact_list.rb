@@ -13,8 +13,9 @@ module ExpoSync
       grouped_data.each do |id, contact_locales|
         contact = find_or_create_by(:ContactID => id)
         contact_locales.each do |a|
-          I18n.locale = a[:Name]
-          contact.update_attributes(a.except(:Name, :ID))
+          I18n.with_locale a[:Name] do
+            contact.update_attributes(a.except(:Name, :ID))
+          end
         end
       end
     end

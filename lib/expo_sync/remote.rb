@@ -5,7 +5,11 @@ require 'expo_sync/data_model'
 require 'expo_sync/models/account_list'
 require 'expo_sync/models/contact_list'
 require 'expo_sync/models/category_list'
+require 'expo_sync/models/category_account_list'
 require 'expo_sync/models/project'
+
+require 'expo_sync/models/event_list'
+require 'expo_sync/models/block_list'
 
 module ExpoSync
   module Remote
@@ -15,7 +19,7 @@ module ExpoSync
       cattr_accessor :deleted_fields
 
 
-      self.data_array_fields  = [:CategoryAccountList]
+      self.data_array_fields  = []
       self.deleted_fields     = [:DeletedAccountIDs, :DeletedCategoryAccountIDs, :DeletedCategoryIDs, :DeletedContactIDs]
 
       RemoteData.date_keys = [:UpdatedDateTime, :CreatedDateTime]
@@ -34,10 +38,9 @@ module ExpoSync
         ExpoSync::AccountList.store_with_locale(data[:AccountList], @delta)
         ExpoSync::ContactList.store_with_locale(data[:ContactList], @delta)
         ExpoSync::CategoryList.store_with_locale(data[:CategoryList], @delta)
+        ExpoSync::CategoryAccountList.store(data[:CategoryAccountList], @delta)
 
         $redis.set(@redis_delta_key, data[:DeltaLastDateTime])
-        # ExpoSync::Project.store_with_locale(data[:Project])
-        super
         true
       end
 
@@ -46,12 +49,20 @@ module ExpoSync
     class GetRoomEventData < Base
       include ExpoSync::DataStorage
 
-      self.data_array_fields  = [:BlockList, :EventList, :SectionGroupList, :SectionList]
+      self.data_array_fields  = [:SectionGroupList, :SectionList]
 
-      RemoteData.date_keys = [:UpdatedDateTime, :CreatedDateTime, :EventDate, :StartTime, :EndTime]
+      RemoteData.date_keys = [:UpdatedDateTime, :CreatedDateTime, :EventDate, :StartTime, :EndTime, :AvailableFrom, :AvailableTo]
 
       def initialize
         super('GetRoomEventData', :delta => 'roomEventLastModified')
+      end
+
+      def store
+        ExpoSync::EventList.store_with_locale(data[:EventList])
+        ExpoSync::BlockList.store_with_locale(data[:BlockList])
+
+        super
+        true
       end
 
     end

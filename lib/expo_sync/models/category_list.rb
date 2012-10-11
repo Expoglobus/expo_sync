@@ -9,8 +9,9 @@ module ExpoSync
       grouped_data.each do |id, category_locales|
         category = find_or_create_by(:CategoryID => id)
         category_locales.each do |a|
-          I18n.locale = a[:Name]
-          category.update_attributes(a.except(:Name, :ID))
+          I18n.with_locale a[:Name] do
+            category.update_attributes(a.except(:Name, :ID))
+          end
         end
       end
     end
