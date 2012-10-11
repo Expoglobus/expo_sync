@@ -22,7 +22,7 @@ module ExpoSync
       self.data_array_fields  = []
       self.deleted_fields     = [:DeletedAccountIDs, :DeletedCategoryAccountIDs, :DeletedCategoryIDs, :DeletedContactIDs]
 
-      RemoteData.date_keys = [:UpdatedDateTime, :CreatedDateTime]
+      self.date_fields = [:UpdatedDateTime, :CreatedDateTime]
 
       #
       # ### Get data without delta
@@ -51,7 +51,7 @@ module ExpoSync
 
       self.data_array_fields  = [:SectionGroupList, :SectionList]
 
-      RemoteData.date_keys = [:UpdatedDateTime, :CreatedDateTime, :EventDate, :StartTime, :EndTime, :AvailableFrom, :AvailableTo]
+      self.date_fields = [:UpdatedDateTime, :CreatedDateTime, :EventDate, :StartTime, :EndTime, :AvailableFrom, :AvailableTo]
 
       def initialize
         super('GetRoomEventData', :delta => 'roomEventLastModified')
@@ -71,7 +71,7 @@ module ExpoSync
       include ExpoSync::DataStorage
       self.data_array_fields = [:AccessGroupList, :ParticipationCategoryList, :ParticipiationAccessGroupList, :ProjectCultureList]
 
-      RemoteData.date_keys = [:UpdatedDateTime, :CreatedDateTime, :EndDate, :StartDate]
+      self.date_fields = [:UpdatedDateTime, :CreatedDateTime, :EndDate, :StartDate]
 
       def initialize
         super('GetProjectData')

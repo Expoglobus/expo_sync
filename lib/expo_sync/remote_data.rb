@@ -1,19 +1,21 @@
 module ExpoSync
   class RemoteData < Hash
-    cattr_accessor :date_keys
 
-    self.date_keys = []
+    def date_fields
+      @date_fields || []
+    end
 
-    def normalize!
+    def normalize!(fields = [])
+      @date_fields = fields
       normalize_date!
       each do |_k, v|
-        v.normalize! if v.kind_of?(RemoteData)
-        v.map { |h| h.normalize! } if v.kind_of?(Array)
+        v.normalize!(date_fields) if v.kind_of?(RemoteData)
+        v.map { |h| h.normalize!(date_fields) } if v.kind_of?(Array)
       end
     end
 
     def normalize_date!
-      date_keys.each do |key|
+      date_fields.each do |key|
         include?(key) ? self[key] = parse_date(self[key]) : next
       end
     end

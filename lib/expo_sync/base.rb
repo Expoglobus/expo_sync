@@ -24,6 +24,7 @@ module ExpoSync
     attr_reader :response
     attr_reader :data
     attr_reader :last_update_param
+    cattr_accessor(:date_field) { [] }
 
     def initialize(method, options = {})
       options.symbolize_keys!
@@ -50,7 +51,8 @@ module ExpoSync
     def parse
       # ["AccountList", "CategoryAccountList", "CategoryList", "ContactList", "DeletedAccountIDs", "DeletedCategoryAccountIDs", "DeletedCategoryIDs", "DeletedContactIDs"]
       @data = JSON.parse(@response.body, object_class: RemoteData, symbolize_names: true)[:"#{@method}Result"]
-      @data.normalize! if @data
+      raise "Sync fail. Respose body: nil" unless @data
+      @data.normalize!(date_field)
       true
     end
 
