@@ -71,6 +71,8 @@ module ExpoSync
       include ExpoSync::DataStorage
       self.data_array_fields = [:AccessGroupList, :ParticipationCategoryList, :ParticipiationAccessGroupList, :ProjectCultureList]
 
+      RemoteData.date_keys = [:UpdatedDateTime, :CreatedDateTime, :EndDate, :StartDate]
+
       def initialize
         super('GetProjectData')
       end
