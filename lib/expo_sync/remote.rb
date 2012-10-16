@@ -35,10 +35,10 @@ module ExpoSync
       end
 
       def store
-        ExpoSync::AccountList.store_with_locale(data[:AccountList], @delta)
-        ExpoSync::ContactList.store_with_locale(data[:ContactList], @delta)
-        ExpoSync::CategoryList.store_with_locale(data[:CategoryList], @delta)
-        ExpoSync::CategoryAccountList.store(data[:CategoryAccountList], @delta)
+        ExpoSync::AccountList.store_with_locale(data[:AccountList], @delta[:value])
+        ExpoSync::ContactList.store_with_locale(data[:ContactList], @delta[:value])
+        ExpoSync::CategoryList.store_with_locale(data[:CategoryList], @delta[:value])
+        ExpoSync::CategoryAccountList.store(data[:CategoryAccountList], @delta[:value])
 
         $redis.set(@redis_delta_key, data[:DeltaLastDateTime])
         true

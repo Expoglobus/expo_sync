@@ -71,8 +71,8 @@ module ExpoSync
       path_map(SERVICE_URL, :domain => ExpoSync.service_domain, :method => @method)
     end
 
-      def self.process!
-        instance = self.new
+      def self.process!(force = false)
+        instance = force ? self.new(:force => true) : self.new
         instance.fetch
         instance.parse
         instance

@@ -1,7 +1,14 @@
 require 'rake'
 
 namespace :expo_sync do
-  desc "Start data sync with server"
+  desc "Start data sync with server by project id"
+
+  task "process:id", [:id] => :environment do |t, args|
+    ExpoSync.project_id = args.id
+    process
+  end
+
+  desc "Start data sync with server by default project id"
   task :process => :environment do
     process
   end
@@ -16,8 +23,9 @@ namespace :expo_sync do
   end
 
   def process
+    force = !!ENV['FORCE']
     puts "#### Sync ContactAccountData... "
-    ExpoSync::Remote::GetContactAccountData.process!
+    ExpoSync::Remote::GetContactAccountData.process!(force)
     puts
     puts "#### Sync GetProjectData... "
     ExpoSync::Remote::GetProjectData.process!

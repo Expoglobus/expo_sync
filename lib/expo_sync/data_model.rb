@@ -24,8 +24,8 @@ module ExpoSync
         end
       end
 
-      def process!
-        instance = super
+      def process!(force = false)
+        instance = super(force)
         instance.store
       end
     end
