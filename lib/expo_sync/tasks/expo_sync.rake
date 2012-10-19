@@ -16,7 +16,7 @@ namespace :expo_sync do
   desc "Start data sync All projects with server"
   task 'process:all' => :environment do
     # TODO: get projects by server
-    (9..12).each do |id|
+    (9..14).each do |id|
       ExpoSync.project_id = id
       process
     end
