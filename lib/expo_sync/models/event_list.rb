@@ -3,6 +3,8 @@ module ExpoSync
     field :EventDescription, localize: true
     field :EventName, localize: true
 
+    index "EventID" => 1
+
     def self.store_with_locale(data, delta = false)
       destroy_all if !delta
       data.each do |e|

@@ -4,6 +4,11 @@ module ExpoSync
     field :ExponentDescription, localize: true
     field :OrganizationName, localize: true
 
+    index "AccountID" => 1
+
+    index "Plan" => 1
+    index "PlanBlockIDs" => 1
+
     def self.store_with_locale(data, delta = false)
       destroy_all if !delta
       grouped_data = data.group_by {|a| a[:AccountID]}

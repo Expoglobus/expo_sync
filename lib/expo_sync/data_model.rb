@@ -6,6 +6,8 @@ module ExpoSync
   class DataModel
     include Mongoid::Document
     default_scope -> { where(ProjectID: ExpoSync.project_id) }
+
+    index "ProjectID" => 1
   end
 
   module DataStorage

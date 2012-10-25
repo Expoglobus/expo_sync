@@ -3,6 +3,8 @@ module ExpoSync
     field :BlockDescription, localize: true
     field :BlockName, localize: true
 
+    index "BlockID" => 1
+
     def self.store_with_locale(data, delta = false)
       destroy_all if !delta
       data.each do |b|

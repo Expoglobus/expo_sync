@@ -3,6 +3,8 @@ module ExpoSync
     field :CategoryName, localize: true
     field :CategoryDescription, localize: true
 
+    index "CategoryID" => 1
+
     def self.store_with_locale(data, delta = false)
       destroy_all if !delta
       grouped_data = data.group_by {|c| c[:CategoryID]}

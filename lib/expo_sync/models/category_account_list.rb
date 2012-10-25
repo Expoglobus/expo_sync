@@ -1,6 +1,10 @@
 module ExpoSync
   class CategoryAccountList < DataModel
 
+    index "CategoryAccountID" => 1
+
+    index({ :AccountID => 1, :CategoryID => 1 }, { unique: true })
+
     def self.store(data, delta = false)
       destroy_all if !delta
       data.each do |ca|
