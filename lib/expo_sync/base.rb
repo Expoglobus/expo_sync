@@ -25,7 +25,8 @@ module ExpoSync
     attr_reader :data
     attr_reader :last_update_param
 
-    cattr_accessor(:date_fields) { [] }
+    class_attribute(:date_fields)
+    self.date_fields = []
 
     def initialize(method, options = {})
       options.symbolize_keys!
