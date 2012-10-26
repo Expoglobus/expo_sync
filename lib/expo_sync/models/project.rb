@@ -4,6 +4,9 @@ module ExpoSync
     field :ProjectDescription, localize: true
     field :PlaceDescription, localize: true
 
+    field :StartDate, type: DateTime
+    field :EndDate, type: DateTime
+
     def self.store_with_locale(data)
       project = find_or_create_by(:ProjectID => data[:ProjectID])
       project.update_attributes(data)

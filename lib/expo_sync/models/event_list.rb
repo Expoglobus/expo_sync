@@ -3,6 +3,12 @@ module ExpoSync
     field :EventDescription, localize: true
     field :EventName, localize: true
 
+    field :EventDate,     type: DateTime
+    field :StartTime,     type: DateTime
+    field :EndTime,       type: DateTime
+    field :AvailableFrom, type: DateTime
+    field :AvailableTo,   type: DateTime
+
     index "EventID" => 1
 
     def self.store_with_locale(data, delta = false)
