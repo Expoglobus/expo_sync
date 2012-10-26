@@ -22,8 +22,8 @@ module ExpoSync
 
     private
     def parse_date(str)
-      if str =~ /\/Date\((\d+)\+(\d+)\)\// # Parse fuckin Jora "/Date(1345033161020+0300)/"
-        Time.at($1.to_f / 1_000.0)
+      if str =~ /\/Date\((\d+)((\+|\-)\d{2})\d{2}\)\// # Parse fuckin Jora "/Date(1345033161020+0300)/"
+        Time.at($1.to_f / 1_000.0).getlocal("#{$2}:00")
       end
     end
   end
