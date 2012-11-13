@@ -1,15 +1,6 @@
 require 'expo_sync/base'
-require 'expo_sync/remote_data'
-require 'expo_sync/data_model'
-
-require 'expo_sync/models/account_list'
-require 'expo_sync/models/contact_list'
-require 'expo_sync/models/category_list'
-require 'expo_sync/models/category_account_list'
-require 'expo_sync/models/project'
-
-require 'expo_sync/models/event_list'
-require 'expo_sync/models/block_list'
+require 'expo_sync/data_utils'
+require 'expo_sync/models'
 
 module ExpoSync
   module Remote

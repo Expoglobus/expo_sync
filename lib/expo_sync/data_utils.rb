@@ -1,13 +1,31 @@
-require 'active_support/concern'
-
 module ExpoSync
-  require 'mongoid'
+  class RemoteData < Hash
 
-  class DataModel
-    include Mongoid::Document
-    default_scope -> { where(ProjectID: ExpoSync.project_id) }
+    def date_fields
+      @date_fields || []
+    end
 
-    index "ProjectID" => 1
+    def normalize!(fields = [])
+      @date_fields = fields
+      normalize_date!
+      each do |_k, v|
+        v.normalize!(date_fields) if v.kind_of?(RemoteData)
+        v.map { |h| h.normalize!(date_fields) } if v.kind_of?(Array)
+      end
+    end
+
+    def normalize_date!
+      date_fields.each do |key|
+        include?(key) ? self[key] = parse_date(self[key]) : next
+      end
+    end
+
+    private
+    def parse_date(str)
+      if str =~ /\/Date\((\d+)((\+|\-)\d{2})\d{2}\)\// # Parse fuckin Jora "/Date(1345033161020+0300)/"
+        Time.at($1.to_f / 1_000.0).getlocal("#{$2}:00")
+      end
+    end
   end
 
   module DataStorage

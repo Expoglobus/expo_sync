@@ -3,6 +3,8 @@ require 'active_support/all'
 require 'expo_sync/helpers/path_builder'
 require 'expo_sync/helpers/class_builder'
 
+require 'expo_sync/data_utils'
+
 module ExpoSync
   SERVICE_URL = 'https://:domain/egvs/Forum/ForumService.svc/json/:method'.freeze
 
