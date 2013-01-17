@@ -42,7 +42,7 @@ module ExpoSync
       body[:securityToken] = ExpoSync.security_token
       body[:projectID] = ExpoSync.project_id
       if @delta
-        body[@delta[:key]] = (@delta[:value] || 1).to_i
+        body[@delta[:key]] = @delta[:value] || 1
       end
 
       @response = http.post do |request|
@@ -66,6 +66,7 @@ module ExpoSync
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
         faraday.ssl[:verify] = false # Disable SSL Verify. TODO: dont use in prod
+        faraday.options[:timeout] = 360
       end
     end
 
