@@ -12,7 +12,7 @@ module ExpoSync
     index "EventID" => 1
 
     def self.store_with_locale(data, delta = false)
-      destroy_all if !delta
+      delete_all if !delta
       data.each do |e|
         event = find_or_create_by(:EventID => e[:EventID])
         event.update_attributes(e)

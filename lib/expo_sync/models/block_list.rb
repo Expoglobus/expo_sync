@@ -6,7 +6,7 @@ module ExpoSync
     index "BlockID" => 1
 
     def self.store_with_locale(data, delta = false)
-      destroy_all if !delta
+      delete_all if !delta
       data.each do |b|
         block = find_or_create_by(:BlockID => b[:BlockID])
         block.update_attributes(b)

@@ -5,9 +5,14 @@ module ExpoSync
 
   class DataModel
     include Mongoid::Document
-    default_scope -> { where(ProjectID: ExpoSync.project_id) }
+    field :ProjectID
+    default_scope -> { where(ProjectID: ExpoSync.project_id.to_i) }
 
     index "ProjectID" => 1
+
+    def self.delete_all # Fix Mongoid bug
+      super ProjectID: ExpoSync.project_id.to_i
+    end
   end
 
   module CachedModel

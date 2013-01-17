@@ -6,7 +6,7 @@ module ExpoSync
     index "CategoryID" => 1
 
     def self.store_with_locale(data, delta = false)
-      destroy_all if !delta
+      delete_all if !delta
       grouped_data = data.group_by {|c| c[:CategoryID]}
       grouped_data.each do |id, category_locales|
         category = find_or_create_by(:CategoryID => id)

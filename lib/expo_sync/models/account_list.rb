@@ -1,5 +1,6 @@
 module ExpoSync
   class AccountList < DataModel
+    # include CachedModel
     field :ExponentName, localize: true
     field :ExponentDescription, localize: true
     field :OrganizationName, localize: true
@@ -10,7 +11,7 @@ module ExpoSync
     index "PlanBlockIDs" => 1
 
     def self.store_with_locale(data, delta = false)
-      destroy_all if !delta
+      delete_all if !delta
       grouped_data = data.group_by {|a| a[:AccountID]}
       grouped_data.each do |id, account_locales|
         account = find_or_create_by(:AccountID => id)
